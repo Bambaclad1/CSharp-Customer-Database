@@ -2,8 +2,8 @@
 
 
 /* Commenter notes
- * Hi hi! this code was written by bamba. now, this code seems like ALOT to take in. but do not worry, i will carefully explain EVERY function in this code
- * with a code cleanup.
+ * Hi hi! this code was written by bamba. now, this code seems like ALOT to take in but do not worry, its actually quite simple if you understand it
+ * with a small code cleanup.
  * Here is some MUST KNOWS
  * 
  * boolean isPlaying is for the Internet 3DS Remix music to play during the add user interface. wouldn't change values otherwise no playing music :(
@@ -12,9 +12,13 @@
  * while logging in, it delays it so it is realistic like its actually checking and for some *STYLE!*
  * If you'd like to proceed debugging faster, just give those numbers a 5! put them on default if showing it off to others.
  * 
- * thats all you need to know for now fam, i explain more of it as you dig in the code
+ * thats all you need to know for now fam
  * 
  * This code has been written and given a MIT license. 
+ * 
+ * i won't comment anything, but only the confusing part, the rest is up to you.
+ * 
+ * side notes: the authentication process could be a seperate method
  */
 
 namespace KlantenDatabaseNIEUW
@@ -221,20 +225,20 @@ namespace KlantenDatabaseNIEUW
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
                     break;
                 }
-
                 Console.WriteLine("Invalid password. Please try again.");
             }
 
             Console.Clear();
             Console.WriteLine("Welcome in the user database.");
             Console.WriteLine($"Successfully authorized as: {emailAuthorize}");
+            // you can change the sound it is playing HOWEEEVEEER how longer the sound is the more you make it "load"
             var url = "https://github.com/Bambaclad1/test-website/raw/main/mario%20kart%20wii%20loading%20sound%20effect%20when%20you%20go%20on%20nintendo%20WFC.mp3";
             using (var mf = new MediaFoundationReader(url))
             using (var wo = new WasapiOut())
             {
                 wo.Init(mf);
                 wo.Play();
-                while (wo.PlaybackState == PlaybackState.Playing)
+                while (wo.PlaybackState == PlaybackState.Playing) // delay while playing sound effect.
                 {
                     System.Threading.Thread.Sleep(sts2);
                     Console.Write(".");
@@ -245,41 +249,45 @@ namespace KlantenDatabaseNIEUW
                     System.Threading.Thread.Sleep(sts2);
                 }
             }
-            bool check1 = false;
+            bool check1 = false; // check om te zien of input invalid is of niet
+            int newAge;
+
 
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("Which user to edit? Specify their name.");
+
                 foreach (var klant in KlantenList)
                 {
                     Console.WriteLine($"Name: {klant.name}, Age: {klant.age}, Email: {klant.Email}");
                 }
+
                 Console.WriteLine("Edit who?");
                 string edit = Console.ReadLine();
-                int newAge;
 
                 for (int i = 0; i < KlantenList.Count; i++)
                 {
-                    if (edit == KlantenList[i].name)
+                    if (edit == KlantenList[i].name) // if console.readline corrosponds with klantenlist thing proceed if not retry
                     {
                         Console.Clear();
                         Console.WriteLine($"Editing user: {KlantenList[i].name}, please input the user's new name.");
                         string newName = Console.ReadLine();
 
-                        if (!string.IsNullOrEmpty(newName))
+                        if (!string.IsNullOrEmpty(newName)) // if new name is NOT empty or null continue
                         {
                             check1 = true;
                             Console.WriteLine("Enter new age: ");
                             string newAge1 = Console.ReadLine();
 
-                            if (int.TryParse(newAge1, out newAge) && newAge > 0 && newAge < 100)
+                            if (int.TryParse(newAge1, out newAge) && newAge > 0 && newAge < 100) // if string fits int between 1/99
                             {
                                 Console.WriteLine("Enter new email (@ramanmail will be added at the end)");
                                 string newEmail = Console.ReadLine() + "@ramanmail.com";
 
                                 if (!string.IsNullOrEmpty(newEmail))
                                 {
+                                    // final touches, actually making the list update
                                     KlantenList[i].name = newName;
                                     KlantenList[i].age = newAge;
                                     KlantenList[i].Email = newEmail;
@@ -290,7 +298,7 @@ namespace KlantenDatabaseNIEUW
                                     {
                                         await outputFile.WriteLineAsync($"{DateTime.Now} - {emailAuthorize} edited user {edit}.");
                                     }
-                                    return; // Exit the method after successful update
+                                    return; 
                                 }
                                 else
                                 {
@@ -321,21 +329,16 @@ namespace KlantenDatabaseNIEUW
             }
         }
 
-
-
-
-
-
         static async void AddRegisteredUsers()
         {
-            List<Klant> Customer = new List<Klant>();
+            //if you would like a small documentation on this, check the Edit Users method, i already explained this once
             bool emailAuthenticated = false;
             bool passwordAuthenticated = false;
+            string emailAuthorize;
+            string passwordAuthorize;
 
             Console.Clear();
             Console.WriteLine("You must require admin permissions to add users. Please authorize.");
-            string emailAuthorize;
-            string passwordAuthorize;
 
             while (true)
             {
@@ -356,19 +359,13 @@ namespace KlantenDatabaseNIEUW
                     }
                 }
 
-
-
                 if (emailAuthenticated)
                 {
-
                     break;
                 }
                 Console.Clear();
                 Console.WriteLine("Invalid email. Please try again.");
-
-
             }
-
 
             while (true)
             {
@@ -385,8 +382,6 @@ namespace KlantenDatabaseNIEUW
                         passwordAuthenticated = true;
                     }
                 }
-
-
 
                 if (passwordAuthenticated)
                 {
@@ -423,7 +418,7 @@ namespace KlantenDatabaseNIEUW
             Console.Clear();
             isPlaying = true;
             int count = 0;
-
+            // plays a 3ds tune hosted on my github
             var url = "https://github.com/Bambaclad1/test-website/raw/main/youtube_wlfxjNeViHk_audio.mp3";
             using (var mf = new MediaFoundationReader(url))
             using (var wo = new WasapiOut())
@@ -433,30 +428,32 @@ namespace KlantenDatabaseNIEUW
 
                         wo.Init(mf);
                         wo.Play();
-                        while (wo.PlaybackState == PlaybackState.Playing)
+                        while (wo.PlaybackState == PlaybackState.Playing) // while playing execute code
                         {
                             while (true)
                             {
-
                                 string fullName;
+
                                 System.Threading.Thread.Sleep(sts2);
                                 Console.WriteLine("Welcome to the add a new user setup!");
                                 Console.WriteLine("");
                                 Console.WriteLine("Enter the new person's full name:");
                                 fullName = Console.ReadLine();
 
+                                //dummy customer to modify contents later
                                 Klant newCustomer = new Klant(fullName, 0, "", false, "", 0);
 
                                 if (!string.IsNullOrEmpty(fullName) && fullName.Equals(newCustomer.name))
-
                                 {
                                     Console.WriteLine("Username set!");
                                     System.Threading.Thread.Sleep(sts2);
                                     Console.Clear();
 
                                     int aAge;
+
                                     Console.WriteLine("Enter the new person's age.");
                                     string age = Console.ReadLine();
+
                                     int.TryParse(age, out aAge);
                                     newCustomer.age = aAge;
 
@@ -470,7 +467,6 @@ namespace KlantenDatabaseNIEUW
                                         newCustomer.Email = email + "@ramanmail.com";
 
                                         if (!string.IsNullOrEmpty(email))
-
                                         {
                                             KlantenList.Add(newCustomer);
 
@@ -479,7 +475,7 @@ namespace KlantenDatabaseNIEUW
                                                 await outputFile.WriteLineAsync($"{DateTime.Now} - {emailAuthorize} has added user {fullName}.");
                                             }
 
-                                            char aChar = '?';
+                                            char aChar = '?'; // exit or not bla bla vs reads if you want to exit the add user method or not
                                             string action = "null";
                                             Console.Clear();
                                             System.Threading.Thread.Sleep(sts2);
@@ -507,31 +503,24 @@ namespace KlantenDatabaseNIEUW
                                                 }
                                                 isPlaying = false;
                                                 break;
-
                                             }
                                             else
                                             {
                                                 Console.Clear();
                                                 Console.WriteLine("Invalid input, please try again.");
                                             }
-
-
-
                                         }
                                         else
                                         {
                                             Console.Clear();
                                             Console.WriteLine("Invalid input, please try again.");
                                         }
-
-
                                     }
                                     else
                                     {
                                         Console.Clear();
                                         Console.WriteLine("Invalid input, please try again.");
                                     }
-
                                 }
                             }
                             break;
@@ -544,10 +533,11 @@ namespace KlantenDatabaseNIEUW
         {
             bool emailAuthenticated = false;
             bool passwordAuthenticated = false;
-            Console.Clear();
-            Console.WriteLine("You must require admin permissions to remove users. Please authorize.");
             string emailAuthorize;
             string passwordAuthorize;
+            Console.Clear();
+            Console.WriteLine("You must require admin permissions to remove users. Please authorize.");
+
 
             while (true)
             {
@@ -705,13 +695,11 @@ namespace KlantenDatabaseNIEUW
                 }
                 else if (invalid == true)
                 {
-                    Console.Clear();
+    
+                Console.Clear();
                     Console.WriteLine("Incorrect username. Try again.");
                 }
             }
-
-
-
         }
     }
 
@@ -722,4 +710,3 @@ namespace KlantenDatabaseNIEUW
 
 
     
-
