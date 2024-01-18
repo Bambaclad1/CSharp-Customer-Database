@@ -1,7 +1,20 @@
 ﻿using NAudio.Wave;
 
 
-/*Things to be fixed
+/* Commenter notes
+ * Hi hi! this code was written by bamba. now, this code seems like ALOT to take in. but do not worry, i will carefully explain EVERY function in this code
+ * with a code cleanup.
+ * Here is some MUST KNOWS
+ * 
+ * boolean isPlaying is for the Internet 3DS Remix music to play during the add user interface. wouldn't change values otherwise no playing music :(
+ * 
+ * static int sts, basically, i use the command System.Threading.Thread.Sleep(); to generate a fake delay, for example
+ * while logging in, it delays it so it is realistic like its actually checking and for some *STYLE!*
+ * If you'd like to proceed debugging faster, just give those numbers a 5! put them on default if showing it off to others.
+ * 
+ * thats all you need to know for now fam, i explain more of it as you dig in the code
+ * 
+ * This code has been written and given a MIT license. 
  */
 
 namespace KlantenDatabaseNIEUW
@@ -9,24 +22,35 @@ namespace KlantenDatabaseNIEUW
     internal class Program
     {
         static bool isPlaying = false;
+
         static List<Klant> KlantList = new List<Klant>();
         static List<Klant> KlantenList = new List<Klant>();
-        static int sts = 1000; // System Threading Sleep, for faster running. Original: 1000
-        static int sts2 = 500; // System Threading Sleep, for faster running, Original: 500.
 
-        static string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        static int sts = 1000; // long delay generator integer?default: 1000
+        static int sts2 = 500; // short delay generator integer? default: 500.
 
-        static async Task Main()
+        // make a document appear on your desktop where i funnily enough log what you are doing on my database =))
+        static string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); 
+
+        static async Task Main() // pluh!
         {
-            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "RamanCooporation_Log.txt")))
+            // writing text to the document, at the moment you run this program it will log it.
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "RamanCooporation_Log.txt"))) // ignore typo, and i do NOT recommend changing this or you break the whole document thing, only if you know what you're doing your gonna have to make the changes everywhere in the code and that means changing the text to the new text in every part, but vs has a cool function for this and that is if you press CTRL+F you can mass rename a old name to a new name. Convenient.
             {
-                await outputFile.WriteLineAsync("# Action Logger made by /bambito =))");
+                await outputFile.WriteLineAsync("# Action Logger made by /bambito =))"); // bamba was here
                 await outputFile.WriteLineAsync($"# Started logging at: {DateTime.Now}");
                 await outputFile.WriteLineAsync("");
 
             }
-            Klant Raman = new Klant("Ramandeep Singh", 16, "bamba@ramanmail.com", true, "ramannoodles", 001);
+            
+            // okay, this is gonna sound complicated, but listen good.
+            // This will be the basic list everytime you "run" the program. those users will be PERMANENT.
+            // the parameters go like, ("String(name))", (int(age)), (string(email)), *(bool(authorized)), (string(password)), (int(ID)).
+            // for more depth informationm, head to the file Klant.cs.
+            // bare in mind, that the bool: authorized (true or false), does NOT do anything. it is broken, but it does nothing. Removing it makes things complicated for you and me.
+            // for me to keep the code running again so we keep it there. visual studio will cry about it, go ahead and try.
+            // also the lack of time like jeez i only have a week left and so much shit left to do, i mean it works it works so yuh uh
+            Klant Raman = new Klant("Ramandeep Singh", 16, "bamba@ramanmail.com", true ,"ramannoodles", 001);
             Klant sudo = new Klant("/root/", 0, "root", true, "root", 000); // uncomment if debugging finished 
             Klant Jan = new Klant("Jan Pannenkoek", 35, "janpannenkoek@ramanmail.com", false, "wachtwoord", 002);
             Klant Aykan = new Klant("Aykan", 17, "Aykan@ramanmail.com", false, "wachtwoord", 003);
@@ -42,12 +66,16 @@ namespace KlantenDatabaseNIEUW
             Klant Nohmi = new Klant("Nohmi Jaguar", 22, "Nohmi@ramanmail.com", false, "wachtwoord", 012);
             Klant Dani = new Klant("Dani Jaguar", 65, "Dani@ramanmail.com", false, "wachtwoord", 013);
             Klant pookie = new Klant("Pookie.IO", 16, "pookiebear.io@gmail.com", false, "wachtwoord", 014);
+          
 
 
-
-            KlantList.Add(Raman);   //KlantList is the list for admins!!
+            // This list is dedicated to users with Admin access. if you add a user above, also add a user below as klantlist.
+            // if you add them into klantlist, you can login with them. if you add them into klantenlist, you can view them in a list
+            // for a regular user, just a klantenlist.add would be fine.
+            // feel free to try to add users, but make sure to add them to the list too, otherwise you will get a buncho errors
+            KlantList.Add(Raman);
             KlantList.Add(sudo);
-            KlantenList.Add(Raman); //KlantenList is the regular list to add any user to.
+            KlantenList.Add(Raman);
             KlantenList.Add(Jan);
             KlantenList.Add(Aykan);
             KlantenList.Add(Ozan);
@@ -63,12 +91,11 @@ namespace KlantenDatabaseNIEUW
             KlantenList.Add(pookie);
 
 
-
-
-            while (true) // This loop is to ensure the user cannot break out the menu.
+            while (true) // This loop is to ensure the user cannot break out the menu. a requirement for the project itself.
             {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.BackgroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Black; // usually the color goes blue after going to the menu, i think this is a visual studio bug
+                Console.BackgroundColor = ConsoleColor.Black; // tbf, so just keep it there.
+
                 Console.WriteLine("Welcome in the Customer Database of Raman Cooperation.");
                 Console.WriteLine("");
                 Console.WriteLine("1 - View Users");
@@ -77,14 +104,13 @@ namespace KlantenDatabaseNIEUW
                 Console.WriteLine("4 - Remove Users");
                 Console.WriteLine("5 - Exit");
                 Console.WriteLine("");
-
-
                 Console.WriteLine("Enter Choice");
+
                 string keuze = Console.ReadLine();
                 int choice = 0;
-                int.TryParse(keuze, out choice);
+                int.TryParse(keuze, out choice); //parse string to int blah blah
 
-                switch (choice)
+                switch (choice) // pretty self-explainatory.
                 {
                     case 0:
 
@@ -102,35 +128,25 @@ namespace KlantenDatabaseNIEUW
                         RemoveRegisteredUsers();
                         break;
                     case 5:
-                        using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "RamanCooporation_Log.txt"), true))
-                        {
-                            await outputFile.WriteLineAsync($"{DateTime.Now} - Terminal Exited.");
-                        }
-                        Console.WriteLine("Actions logged to My Documents.");
                         Environment.Exit(0);
                         break;
-
                 }
                 Console.Clear();
-
             }
-
-
-
-
         }
 
-        #region viewusers
         static async void ViewRegisteredUsers()
         {
             Console.Clear();
             Console.WriteLine("View users.");
+            
+            // its snitching you when you viewed the users.
             using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "RamanCooporation_Log.txt"), true))
             {
                 await outputFile.WriteLineAsync($"{DateTime.Now} - Users have been viewed.");
             }
 
-
+            //printing the users out. now you can extend this, if you'd actually like to, but you also need to add that to the addusers method.
             foreach (var klant in KlantenList)
             {
                 Console.WriteLine($"Name: {klant.name}, Age: {klant.age}, Email: {klant.Email}");
@@ -139,30 +155,25 @@ namespace KlantenDatabaseNIEUW
             Console.WriteLine("\nPress Enter to continue...");
             Console.ReadLine();
         }
-
-        #endregion
-
-
-        #region edituser
         static async void EditRegisteredUsers()
         {
-            bool emailAuthenticated = false;
-            bool passwordAuthenticated = false;
+            bool emailAuthenticated = false; // dont you dare change this value
+            bool passwordAuthenticated = false; // or ill kidnap your parents (you break the code this way)
+            string emailAuthorize;
+            string passwordAuthorize;
+
             Console.Clear();
             Console.WriteLine("You have pressed to Edit the registered users.");
             Console.WriteLine("You must require admin permissions to edit a user. Please authorize.");
 
-            string emailAuthorize;
-            string passwordAuthorize;
-
-            while (true)
+            while (true) // loop to ensure your not breaking out the login process
             {
                 Console.WriteLine();
                 Console.Write("Email: ");
                 emailAuthorize = Console.ReadLine();
-                System.Threading.Thread.Sleep(sts2);
+                System.Threading.Thread.Sleep(sts2); // delay
 
-                for (int i = 0; i < KlantList.Count; i++)
+                for (int i = 0; i < KlantList.Count; i++) // im telling the computer to look up every user in the admin list to see if the email matches
                 {
                     if (emailAuthorize == KlantList[i].Email)
                     {
@@ -174,40 +185,35 @@ namespace KlantenDatabaseNIEUW
                     }
                 }
 
-
-
                 if (emailAuthenticated)
                 {
 
-                    break;
+                    break; // if it does, you break out of the loop like a successfull prisoner
                 }
 
-                Console.WriteLine("Invalid email. Please try again.");
-
-
+                Console.WriteLine("Invalid email. Please try again."); // if it doesn't, it tells you to try again. smooth right?
             }
 
-
-            while (true)
+            while (true) // this is the same process, but only for password
             {
                 Console.WriteLine();
                 Console.Write("Password: ");
                 passwordAuthorize = Console.ReadLine();
+
                 System.Threading.Thread.Sleep(sts2);
+
                 for (int i = 0; i < KlantList.Count; i++)
                 {
                     if (passwordAuthorize == KlantList[i].Password)
                     {
-
                         Console.WriteLine($"Welcome {passwordAuthorize}. Please input your Password.");
                         passwordAuthenticated = true;
                     }
                 }
 
-
-
                 if (passwordAuthenticated)
                 {
+                    // bro is snitching you edited users :moyai: basically writes text, i think this is obvious already now
                     using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "RamanCooporation_Log.txt"), true))
                     {
                         await outputFile.WriteLineAsync($"{DateTime.Now} - {emailAuthorize} has authenticated to edit users.");
@@ -239,8 +245,6 @@ namespace KlantenDatabaseNIEUW
                     System.Threading.Thread.Sleep(sts2);
                 }
             }
-            // ... (previous code remains unchanged)
-
             bool check1 = false;
 
             while (true)
@@ -316,14 +320,12 @@ namespace KlantenDatabaseNIEUW
                 }
             }
         }
-        #endregion
 
 
 
 
 
 
-        #region addUser
         static async void AddRegisteredUsers()
         {
             List<Klant> Customer = new List<Klant>();
@@ -537,13 +539,7 @@ namespace KlantenDatabaseNIEUW
                     }
                 }
         }
-        #endregion
 
-
-
-
-
-        #region removeusers
         static async void RemoveRegisteredUsers()
         {
             bool emailAuthenticated = false;
@@ -721,7 +717,7 @@ namespace KlantenDatabaseNIEUW
 
 
 }
-#endregion
+
 
 
 
